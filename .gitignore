@@ -1,1 +1,5 @@
+desktop.ini
+**/__pycache__/
+.vscode/
+
 data/form_component_data.tsv
