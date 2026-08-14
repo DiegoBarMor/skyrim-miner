@@ -13,16 +13,15 @@ def main():
     })
     df_statics["base_form"] = df_statics["base_form"].str.strip("()")
     df_statics = df_statics.sort_values(by = "base_form")
-    df_statics.to_csv(PATH_CSV_OUT, index = False)
-
+    df_statics.to_csv(PATH_CSV_META, index = False)
+    ### 12099/12107 entries have a path to texture
 
 
 ################################################################################
 if __name__ == "__main__":
     FOLDER_DATA = Path("data")
     PATH_TSV_FCD = FOLDER_DATA / "form_component_data.tsv"
-    PATH_CSV_OUT = FOLDER_DATA / "statics.meta.csv"
-
+    PATH_CSV_META = FOLDER_DATA / "statics.meta.csv"
     main()
 
 
