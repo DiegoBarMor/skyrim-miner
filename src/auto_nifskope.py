@@ -34,25 +34,15 @@ def screenshot_direction(name: str, key: str) -> None:
 
     ### navigate the menu until the screenshot button
     press_key("alt+f")
-    for _ in range(3):
-        press_key("right", 2*DEFAULT_DELAY)
-    for _ in range(9):
-        press_key("up", 2*DEFAULT_DELAY)
+    for _ in range(3): press_key("right", 2*DEFAULT_DELAY)
+    for _ in range(9): press_key("up", 2*DEFAULT_DELAY)
 
-    press_key("enter", 10*DEFAULT_DELAY) # press the screenshot button
+    press_key("enter", 15*DEFAULT_DELAY) # press the screenshot button
 
-    # pyperclip.copy(f"screenshots\\{name}-{key}.jpg")
-    # press_key("shift+home", 7*DEFAULT_DELAY)
-    # press_key("ctrl+v", 3*DEFAULT_DELAY)
-
-    for _ in range (22):
-        press_key("backspace")
-    # for _ in range (6):
-    #     press_key("ctrl+shift+left", 2*DEFAULT_DELAY)
-    # for _ in range (12):
-    #     press_key("shift+left", 2*DEFAULT_DELAY)
+    ### change the name of the output
+    for _ in range (22): press_key("backspace")
     pyperclip.copy(f"-{key}.jpg")
-    press_key("ctrl+v", 3*DEFAULT_DELAY)
+    press_key("ctrl+v", 5*DEFAULT_DELAY)
 
     press_key("enter", 20*DEFAULT_DELAY) # save the screenshot
 
@@ -68,32 +58,34 @@ def main():
     df_meta = preprocess_csv_meta(PATH_CSV_META, FOLDER_BAE)
     df_meta = df_meta[~df_meta["missing"]].reset_index(drop = True)
 
-    print(f">>> Total valid: {len(df_meta)}. Press 's' to start processing")
+    df_meta["name_path"] = df_meta["path_texture"].apply(lambda p: Path(p).stem.lower())
+    df_meta.sort_values(by = "name_path", inplace = True)
+    df_meta.reset_index(drop = True, inplace = True)
+
     print(f">>> Screenshots directory: {FOLDER_SCREENSHOTS}")
+    print(f">>> Total NIF files to process: {len(df_meta)}. Press 's' to start processing")
     keyboard.wait('s')
 
     start = time.time()
-    for _,row in df_meta.iterrows():
+    for i,row in df_meta.iterrows():
         path_nif: Path = (FOLDER_BAE / row["path_texture"]).resolve()
-        # name: str = row["name"].lower()
-        name = path_nif.stem.lower()
+        name = row["name_path"]
 
         elapsed = time.time() - start
         ratio = 3*elapsed/NPROCESSED if NPROCESSED > 0 else 0
 
         if processed_before(name):
-            print(f"Already processed: {name}")
+            print(f"... Already processed: {name}")
             continue
 
-        print(f">>> Checking '{name}'. {NPROCESSED}/{3*len(df_meta)} ({ratio:.2f} s/nif)")
+        print(f">>> Processing '{name}'. {i}/{len(df_meta)} (~{ratio:.2f} s/nif)")
         pyperclip.copy(str(path_nif))
 
         ### open the NIF file
         press_key("alt+f", 5*DEFAULT_DELAY)
         press_key("enter", 50*DEFAULT_DELAY)
         press_key("ctrl+v", 10*DEFAULT_DELAY)
-        # keyboard.write(str(path_nif), delay = 0.01)
-        press_key("enter", 20*DEFAULT_DELAY)
+        press_key("enter", 70*DEFAULT_DELAY)
 
         screenshot_direction(name, "t") # top view
         screenshot_direction(name, "f") # front view
