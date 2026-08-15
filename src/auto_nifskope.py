@@ -26,7 +26,8 @@ def press_key(key: str, delay: float = DEFAULT_DELAY):
 
 # ------------------------------------------------------------------------------
 def screenshot_direction(name: str, key: str) -> None:
-    if (FOLDER_SCREENSHOTS / f"{name}-{key}.jpg").exists():
+    name_output = f"{name}-{key}.jpg"
+    if (FOLDER_SCREENSHOTS / name_output).exists():
         print(f"Already processed: {name}-{key}.jpg")
         return
 
@@ -40,9 +41,11 @@ def screenshot_direction(name: str, key: str) -> None:
     press_key("enter", 15*DEFAULT_DELAY) # press the screenshot button
 
     ### change the name of the output
-    for _ in range (22): press_key("backspace")
-    pyperclip.copy(f"-{key}.jpg")
-    press_key("ctrl+v", 5*DEFAULT_DELAY)
+    pyperclip.copy(name_output)
+    press_key("tab", 10*DEFAULT_DELAY)
+    press_key("space", 50*DEFAULT_DELAY)
+    press_key("ctrl+v", 10*DEFAULT_DELAY)
+    press_key("enter", 20*DEFAULT_DELAY)
 
     press_key("enter", 20*DEFAULT_DELAY) # save the screenshot
 
