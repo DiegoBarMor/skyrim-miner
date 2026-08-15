@@ -1,22 +1,6 @@
 # skyrim-miner
 
 ## Generating the input data
-```
-data/
-├── form_component_data.tsv
-└── ids
-    ├── dawnguard
-    │   └── static.txt
-    ├── dragonborn
-    │   └── static.txt
-    ├── hearthfires
-    │   └── static.txt
-    ├── skyrim
-    │   └── static.txt
-    └── update
-        └── static.txt
-```
-
 ### Extracting the raw data (CreationKit)
 - Open the CreationKit for Skyrim Special Edition
 - In **File->Data** select `Skyrim.esm`, `Update.esm`, `Dawnguard.esm`, `HearthFires.esm`, `Dragonborn.esm` and click OK
@@ -41,6 +25,26 @@ data/
 - Deselect `Skyrim - Meshes0.bsa/meshes`
 - Extract to `data/output_bae`. This will also contain meshes for things outside the static category (leave them there for now)
 - Run `src/assert_nif_paths.py`
+
+### Directory layout after these steps
+```
+data/
+├── form_component_data.tsv
+├── ids/
+│   ├── dawnguard/
+│   │   └── static.txt
+│   ├── dragonborn/
+│   │   └── static.txt
+│   ├── hearthfires/
+│   │   └── static.txt
+│   ├── skyrim/
+│   │   └── static.txt
+│   └── update/
+│       └── static.txt
+├── output_bae/
+│   └── meshes/  [59 entries exceeds filelimit, not opening dir]
+└── statics.meta.csv
+```
 
 
 ## Automating NifSkope rendering

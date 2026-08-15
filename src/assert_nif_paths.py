@@ -2,19 +2,21 @@ from pathlib import Path
 import pandas as pd
 
 # ------------------------------------------------------------------------------
-def main():
-    df_meta = pd.read_csv(PATH_CSV_META)
+def preprocess_csv_meta(path_csv: Path, dir_bae: Path) -> pd.DataFrame:
+    df_meta = pd.read_csv(path_csv)
     df_meta.dropna(subset = ["path_texture"], inplace = True)
     df_meta["path_texture"] = df_meta["path_texture"].str.lower().str.replace('\\', '/')
+    df_meta["missing"] = ~df_meta["path_texture"].apply(lambda p: (dir_bae / p).is_file())
+    return df_meta
 
-    count_missing = 0
-    for _,row in df_meta.iterrows():
-        path_nif: Path = FOLDER_BAE / row["path_texture"]
-        if path_nif.is_file(): continue
+# ------------------------------------------------------------------------------
+def main():
+    df_meta = preprocess_csv_meta(PATH_CSV_META, FOLDER_BAE)
 
+    df_missing = df_meta[df_meta["missing"]]
+    for _,row in df_missing.iterrows():
         print(f"XXX Missing: {row['path_texture']} ({row['name']} base_form={row['base_form']})")
-        count_missing += 1
-    print(f">>> Total missing: {count_missing}")
+    print(f">>> Total missing: {len(df_missing)}")
     # >>> Total missing: 44
 
 
