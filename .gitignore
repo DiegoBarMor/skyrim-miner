@@ -5,3 +5,5 @@ desktop.ini
 data/form_component_data.tsv
 data/statics.processed.csv
 data/output_bae/
+
+tmp*
