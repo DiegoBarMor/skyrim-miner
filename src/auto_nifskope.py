@@ -6,8 +6,7 @@ from pathlib import Path
 
 from assert_nif_paths import preprocess_csv_meta
 
-DEFAULT_DELAY = 0.02
-NPROCESSED = 0
+DELAY = 0.02
 
 # ------------------------------------------------------------------------------
 def processed_before(name: str) -> bool:
@@ -19,7 +18,7 @@ def processed_before(name: str) -> bool:
 
 
 # ------------------------------------------------------------------------------
-def press_key(key: str, delay: float = DEFAULT_DELAY):
+def press_key(key: str, delay: float = DELAY):
     keyboard.press_and_release(key)
     time.sleep(delay)
 
@@ -35,22 +34,19 @@ def screenshot_direction(name: str, key: str) -> None:
 
     ### navigate the menu until the screenshot button
     press_key("alt+f")
-    for _ in range(3): press_key("right", 2*DEFAULT_DELAY)
-    for _ in range(9): press_key("up", 2*DEFAULT_DELAY)
+    for _ in range(3): press_key("right", 2*DELAY)
+    for _ in range(9): press_key("up", 2*DELAY)
 
-    press_key("enter", 15*DEFAULT_DELAY) # press the screenshot button
+    press_key("enter", 15*DELAY) # press the screenshot button
 
     ### change the name of the output
     pyperclip.copy(name_output)
-    press_key("tab", 10*DEFAULT_DELAY)
-    press_key("space", 50*DEFAULT_DELAY)
-    press_key("ctrl+v", 10*DEFAULT_DELAY)
-    press_key("enter", 20*DEFAULT_DELAY)
+    press_key("tab", 10*DELAY)
+    press_key("space", 50*DELAY)
+    press_key("ctrl+v", 10*DELAY)
+    press_key("enter", 20*DELAY)
 
-    press_key("enter", 20*DEFAULT_DELAY) # save the screenshot
-
-    global NPROCESSED
-    NPROCESSED += 1
+    press_key("enter", 20*DELAY) # save the screenshot
 
 
 # ------------------------------------------------------------------------------
@@ -58,41 +54,46 @@ def main():
     if not FOLDER_SCREENSHOTS.exists():
         raise ValueError(f"Folder {FOLDER_SCREENSHOTS} does not exist.")
 
-    df_meta = preprocess_csv_meta(PATH_CSV_META, FOLDER_BAE)
-    df_meta = df_meta[~df_meta["missing"]].reset_index(drop = True)
+    print(f">>> Screenshots directory: {FOLDER_SCREENSHOTS}")
 
-    df_meta["name_path"] = df_meta["path_texture"].apply(lambda p: Path(p).stem.lower())
-    df_meta.sort_values(by = "name_path", inplace = True)
+    df_meta = preprocess_csv_meta(PATH_CSV_META, FOLDER_BAE)
+    print(f">>> Total metadata entries: {len(df_meta)}")
+
+    df_meta = df_meta[~df_meta["missing"]]
+    print(f">>> Total entries with a NIF path: {len(df_meta)}")
+
+    df_meta = df_meta.drop_duplicates("path_texture")
+    print(f">>> Total unique NIF paths to process: {len(df_meta)}")
+
+    df_meta = df_meta.sort_values(by = "name_nif")
     df_meta.reset_index(drop = True, inplace = True)
 
-    print(f">>> Screenshots directory: {FOLDER_SCREENSHOTS}")
-    print(f">>> Total NIF files to process: {len(df_meta)}. Press 's' to start processing")
+    print(f">>> Press 's' to start processing")
     keyboard.wait('s')
 
-    start = time.time()
     for i,row in df_meta.iterrows():
         path_nif: Path = (FOLDER_BAE / row["path_texture"]).resolve()
-        name = row["name_path"]
-
-        elapsed = time.time() - start
-        ratio = 3*elapsed/NPROCESSED if NPROCESSED > 0 else 0
+        name = row["name_nif"]
 
         if processed_before(name):
             print(f"... Already processed: {name}")
             continue
 
-        print(f">>> Processing '{name}'. {i}/{len(df_meta)} (~{ratio:.2f} s/nif)")
+        print(f">>> Processing '{name}', {i}/{len(df_meta)}", end = ' ', flush = True)
+        start = time.time()
         pyperclip.copy(str(path_nif))
 
         ### open the NIF file
-        press_key("alt+f", 5*DEFAULT_DELAY)
-        press_key("enter", 50*DEFAULT_DELAY)
-        press_key("ctrl+v", 10*DEFAULT_DELAY)
-        press_key("enter", 70*DEFAULT_DELAY)
+        press_key("alt+f", 5*DELAY)
+        press_key("enter", 50*DELAY)
+        press_key("ctrl+v", 10*DELAY)
+        press_key("enter", 100*DELAY)
 
         screenshot_direction(name, "t") # top view
         screenshot_direction(name, "f") # front view
         screenshot_direction(name, "l") # left view
+
+        print(f"({time.time()-start:.2f} s/nif)")
 
 
 ################################################################################
@@ -105,6 +106,4 @@ if __name__ == "__main__":
 
 
 ################################################################################
-# python3 src/auto_nifskope.py
-# sudo -E python3 src/auto_nifskope.py # in linux
 # python src\auto_nifskope.py D:\SkyrimTools\NifSkope_2_0_2018-02-22-x64\screenshots

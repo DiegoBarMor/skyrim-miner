@@ -15,7 +15,7 @@ def main():
 
     df_missing = df_meta[df_meta["missing"]]
     for _,row in df_missing.iterrows():
-        print(f"XXX Missing: {row['path_texture']} ({row['name']} base_form={row['base_form']})")
+        print(f"XXX Missing: {row['path_texture']} ({row['editor_name']} base_form={row['base_form']})")
     print(f">>> Total missing: {len(df_missing)}")
     # >>> Total missing: 44
 
