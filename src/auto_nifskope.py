@@ -63,7 +63,11 @@ def main():
     print(f">>> Total entries with a NIF path: {len(df_meta)}")
 
     df_meta = df_meta.drop_duplicates("path_texture")
-    print(f">>> Total unique NIF paths to process: {len(df_meta)}")
+    print(f">>> Total unique NIF paths: {len(df_meta)}")
+
+    mask = df_meta["name_nif"].apply(processed_before)
+    df_meta = df_meta[~mask]
+    print(f">>> Total NIF paths left to process: {len(df_meta)}")
 
     df_meta = df_meta.sort_values(by = "name_nif")
     df_meta.reset_index(drop = True, inplace = True)
@@ -74,10 +78,6 @@ def main():
     for i,row in df_meta.iterrows():
         path_nif: Path = (FOLDER_BAE / row["path_texture"]).resolve()
         name = row["name_nif"]
-
-        if processed_before(name):
-            print(f"... Already processed: {name}")
-            continue
 
         print(f">>> Processing '{name}', {i}/{len(df_meta)}", end = ' ', flush = True)
         start = time.time()

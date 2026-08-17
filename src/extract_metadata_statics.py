@@ -32,6 +32,8 @@ def main():
     df_statics["pseudo_path"] = df_statics["path_texture"].apply(get_pseudo_path)
     df_statics["name_nif"] = df_statics["pseudo_path"].apply(lambda p: Path(p).stem.lower())
 
+    df_statics = df_statics[df_statics["editor_name"] != "Thirsk"] # [WIP] remove weird entry
+
     df_statics = df_statics.sort_values(by = "base_form")
     df_statics.to_csv(PATH_CSV_META, index = False)
 
