@@ -22,7 +22,7 @@ def main():
 
 ################################################################################
 if __name__ == "__main__":
-    FOLDER_DATA = Path("data")
+    FOLDER_DATA = Path("~/Desktop/data/skyrim-miner/data") # change path accordingly
     FOLDER_BAE = FOLDER_DATA / "output_bae/meshes"
     PATH_CSV_META = FOLDER_DATA / "statics.meta.csv"
     main()

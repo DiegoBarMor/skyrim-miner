@@ -11,9 +11,9 @@ DELAY = 0.02
 # ------------------------------------------------------------------------------
 def processed_before(name: str) -> bool:
     return all((
-        (FOLDER_SCREENSHOTS / f"{name}-t.jpg").exists(),
-        (FOLDER_SCREENSHOTS / f"{name}-f.jpg").exists(),
-        (FOLDER_SCREENSHOTS / f"{name}-l.jpg").exists(),
+        (FOLDER_SCREENSHOTS / f"{name}.t.jpg").exists(),
+        (FOLDER_SCREENSHOTS / f"{name}.f.jpg").exists(),
+        (FOLDER_SCREENSHOTS / f"{name}.l.jpg").exists(),
     ))
 
 
@@ -25,9 +25,9 @@ def press_key(key: str, delay: float = DELAY):
 
 # ------------------------------------------------------------------------------
 def screenshot_direction(name: str, key: str) -> None:
-    name_output = f"{name}-{key}.jpg"
+    name_output = f"{name}.{key}.jpg"
     if (FOLDER_SCREENSHOTS / name_output).exists():
-        print(f"Already processed: {name}-{key}.jpg")
+        print(f"Already processed: {name_output}")
         return
 
     press_key(key)
@@ -99,11 +99,11 @@ def main():
 ################################################################################
 if __name__ == "__main__":
     FOLDER_SCREENSHOTS = Path(sys.argv[1]).resolve()
-    FOLDER_DATA = Path("data")
+    FOLDER_DATA = Path("~/Desktop/data/skyrim-miner/data") # change path accordingly
     FOLDER_BAE = FOLDER_DATA / "output_bae/meshes"
     PATH_CSV_META = FOLDER_DATA / "statics.meta.csv"
     main()
 
 
 ################################################################################
-# python src\auto_nifskope.py D:\SkyrimTools\NifSkope_2_0_2018-02-22-x64\screenshots
+# python src/auto_nifskope.py D:\SkyrimTools\NifSkope_2_0_2018-02-22-x64\screenshots
