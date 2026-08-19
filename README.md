@@ -1,4 +1,5 @@
 # skyrim-miner
+Instructions for generating the data used by [Skyrim Assets Catalog](https://diegobarmor.github.io/skyrim-assets-catalog.html). Currently only handling processing of STATIC type assets.
 
 ## Generating the input data
 ### Extracting the form metadata (CreationKit)
@@ -42,13 +43,20 @@ data/
 
 ### Post-processing the screenshots
 - Once the screenshots are ready and validated, move them to `data/output_nifskope/statics`.
+- Run `python3 src/reorganize_screenshots.py`. This step is relevant for facilitating file handling later on inside Google Drive GUI.
 
+### Data directory layout after these steps
 ```
 data/
 ├── form_component_data.tsv
 ├── output_bae
 │   └── meshes  [59 entries exceeds filelimit, not opening dir]
 ├── output_nifskope
-│   └── statics  [26700 entries exceeds filelimit, not opening dir]
+│   └── statics
+│       ├── 1  [351 entries exceeds filelimit, not opening dir]
+│       ├── a  [951 entries exceeds filelimit, not opening dir]
+│       ├── b  [1206 entries exceeds filelimit, not opening dir]
+│       ├── c  [3969 entries exceeds filelimit, not opening dir]
+|       ...
 └── statics.meta.csv
 ```

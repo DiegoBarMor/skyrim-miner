@@ -99,7 +99,7 @@ def main():
 ################################################################################
 if __name__ == "__main__":
     FOLDER_SCREENSHOTS = Path(sys.argv[1]).resolve()
-    FOLDER_DATA = Path("~/Desktop/data/skyrim-miner/data") # change path accordingly
+    FOLDER_DATA = Path("~/Desktop/data/skyrim-miner/data").expanduser() # change path accordingly
     FOLDER_BAE = FOLDER_DATA / "output_bae/meshes"
     PATH_CSV_META = FOLDER_DATA / "statics.meta.csv"
     main()

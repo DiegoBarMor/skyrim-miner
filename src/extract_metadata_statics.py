@@ -40,7 +40,7 @@ def main():
 
 ################################################################################
 if __name__ == "__main__":
-    FOLDER_DATA = Path("~/Desktop/data/skyrim-miner/data") # change path accordingly
+    FOLDER_DATA = Path("~/Desktop/data/skyrim-miner/data").expanduser() # change path accordingly
     PATH_TSV_FCD = FOLDER_DATA / "form_component_data.tsv"
     PATH_CSV_META = FOLDER_DATA / "statics.meta.csv"
     main()
