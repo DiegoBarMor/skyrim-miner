@@ -6,5 +6,6 @@ data/form_component_data.tsv
 data/statics.processed.csv
 data/output_bae/
 data/output_nifskope/
+data/urls
 
 tmp*

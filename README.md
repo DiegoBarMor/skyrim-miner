@@ -3,19 +3,19 @@ Instructions for generating the data used by [Skyrim Assets Catalog](https://die
 
 ## Generating the input data
 ### Extracting the form metadata (CreationKit)
-- Open the CreationKit for Skyrim Special Edition
-- In **File->Data** select `Skyrim.esm`, `Update.esm`, `Dawnguard.esm`, `HearthFires.esm`, `Dragonborn.esm` and click OK
-- Once it loads, click on **File->Export->Form Component Data for all non-World Forms**
-- Export the data into `data/form_component_data.tsv`
-- Run `src/extract_metadata_statics.py` to process the raw data
+- Open the CreationKit for Skyrim Special Edition.
+- In **File->Data** select `Skyrim.esm`, `Update.esm`, `Dawnguard.esm`, `HearthFires.esm`, `Dragonborn.esm` and click OK.
+- Once it loads, click on **File->Export->Form Component Data for all non-World Forms**.
+- Export the data into `data/form_component_data.tsv`.
+- Run `src/extract_metadata_statics.py` to process the raw data.
 
 ### Extracting the NIF files
-- Open [BAE v0.10](https://www.nexusmods.com/skyrimspecialedition/mods/974)
-- Open Skyrim Special Edition directory, then go inside the `Data` directory
-- Drag the `Skyrim - Meshes0.bsa` and `Skyrim - Meshes1.bsa` files into BAE
-- Deselect `Skyrim - Meshes0.bsa/meshes`
-- Extract to `data/output_bae`. This will also contain meshes for things outside the static category (leave them there for now)
-- Run `src/assert_nif_paths.py`
+- Open [BAE v0.10](https://www.nexusmods.com/skyrimspecialedition/mods/974).
+- Open Skyrim Special Edition directory, then go inside the `Data` directory.
+- Drag the `Skyrim - Meshes0.bsa` and `Skyrim - Meshes1.bsa` files into BAE.
+- Deselect `Skyrim - Meshes0.bsa/meshes`.
+- Extract to `data/output_bae`. This will also contain meshes for things outside the static category (leave them there for now).
+- Run `src/assert_nif_paths.py`.
 
 ### Data directory layout after these steps
 ```
@@ -29,10 +29,10 @@ data/
 
 ## Automating NifSkope rendering
 ### Preparing NifSkope
-- Download [NifSkope 2.0Dev7](https://www.nifskope.com/)
-- Open NifSkope, go to **Options->Settings...**, then to **Resources**
-- Click on *Auto Detect Game Paths* and *Auto Detect Archives* in both the **Paths** and **Archives** tabs, respectively
-- (optional) Open any nif file from `data/output_bae`, make sure the textures are loaded properly
+- Download [NifSkope 2.0Dev7](https://www.nifskope.com/).
+- Open NifSkope, go to **Options->Settings...**, then to **Resources**.
+- Click on *Auto Detect Game Paths* and *Auto Detect Archives* in both the **Paths** and **Archives** tabs, respectively.
+- (optional) Open any nif file from `data/output_bae`, make sure the textures are loaded properly.
 
 ### Running automatic NifSkope rendering
 - Run `python src/auto_nifskope.py`, give it as first argument the path to the directory where the screenshots are to be temporary saved.
@@ -44,6 +44,7 @@ data/
 ### Post-processing the screenshots
 - Once the screenshots are ready and validated, move them to `data/output_nifskope/statics`.
 - Run `python3 src/reorganize_screenshots.py`. This step is relevant for facilitating file handling later on inside Google Drive GUI.
+- Run `python3 src/gen_thumbnails.py`.
 
 ### Data directory layout after these steps
 ```
@@ -58,5 +59,24 @@ data/
 │       ├── b  [1206 entries exceeds filelimit, not opening dir]
 │       ├── c  [3969 entries exceeds filelimit, not opening dir]
 |       ...
-└── statics.meta.csv
+├── statics.meta.csv
+└── thumbnails
+    └── statics
+        ├── 1  [117 entries exceeds filelimit, not opening dir]
+        ├── a  [317 entries exceeds filelimit, not opening dir]
+        ├── b  [402 entries exceeds filelimit, not opening dir]
+        ├── c  [1323 entries exceeds filelimit, not opening dir]
+        ...
 ```
+
+
+## Generating URLs for the images
+- Upload the `data/output_nifskope` and `data/thumbnails` directories to Google Drive.
+- Set the share permissions of the directories to *Anyone with the link (viewer)*.
+- Go to every subdirectory and copy the share links of all files (by scrolling to the bottom of the files list to load them, then `Ctrl+A` to select all).
+- Copy every set of URLs and paste them into [JDownloader2](https://jdownloader.org/download/index), following [this instructions](https://stackoverflow.com/questions/41864632/get-google-drive-multiple-shared-links-in-order).
+    - Paste the links in JDownloader Link Grabber tab and wait for all of them to show in the tab.
+    - Click on the **Name** field to sort the links.
+    - Select all links, right click and go to **Properties->Show Download URLs**.
+    - Select all links, right click and **Copy URLs**.
+- Paste the sorted links into the respective output directory`data/urls/{subdirs}/{char}.txt` (e.g. `data/urls/thumbnails/statics/1.txt`)
