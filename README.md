@@ -71,12 +71,27 @@ data/
 
 
 ## Generating URLs for the images
+### Obtaining the URLs
 - Upload the `data/output_nifskope` and `data/thumbnails` directories to Google Drive.
 - Set the share permissions of the directories to *Anyone with the link (viewer)*.
 - Go to every subdirectory and copy the share links of all files (by scrolling to the bottom of the files list to load them, then `Ctrl+A` to select all).
-- Copy every set of URLs and paste them into [JDownloader2](https://jdownloader.org/download/index), following [this instructions](https://stackoverflow.com/questions/41864632/get-google-drive-multiple-shared-links-in-order).
+- Paste the links in some temporary text file.
+
+### Sorting the URLs
+- Put all sets of URLs together into a single comma-separated text file (single row).
+    - Still keep them separated for category, i.e. one large set of URLs for `output_nifskope` and another one for `thumbnails`.
+- Create the `data/urls/output_nifskope.txt` and `data/urls/thumbnails.txt` text files. Initialize them with the following content:
+```ini
+[SECTION_NAMES]
+
+[SECTION_URLS]
+```
+
+- Copy all URLs and paste them into [JDownloader2](https://jdownloader.org/download/index)
+- The following instructions are adapted from [here](https://stackoverflow.com/questions/41864632/get-google-drive-multiple-shared-links-in-order).
     - Paste the links in JDownloader Link Grabber tab and wait for all of them to show in the tab.
     - Click on the **Name** field to sort the links.
-    - Select all links, right click and go to **Properties->Show Download URLs**.
-    - Select all links, right click and **Copy URLs**.
-- Paste the sorted links into the respective output directory`data/urls/{subdirs}/{char}.txt` (e.g. `data/urls/thumbnails/statics/1.txt`)
+    - Select all links, right click and go to **Other->Move to new Pakage**. Move them to a package called `all`.
+    - Select the `all` package, right click and go to **Properties->Show Download URLs**.
+    - Select all links, right click on the left column and click **Copy Information: Name**. Paste the names under `[SECTION_NAMES]`
+    - Select all links, right click on the right column and click **Copy URLs**. Paste the links under `[SECTION_URLS]`
