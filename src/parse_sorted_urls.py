@@ -5,6 +5,18 @@ HEADER_NAMES = "[SECTION_NAMES]"
 HEADER_URLS = "[SECTION_URLS]"
 
 # ------------------------------------------------------------------------------
+def parse_name(name: str) -> str:
+    return name.split('.')[0]
+
+
+# ------------------------------------------------------------------------------
+def parse_url(url: str) -> str:
+    parts = url.split('/')
+    url_id = parts[-2]
+    return f"https://drive.google.com/thumbnail?id={url_id}"
+
+
+# ------------------------------------------------------------------------------
 def parse_ini(path_ini: Path) -> dict[str, str]:
     def get_idx(substr: str) -> int:
         idx = raw.find(substr)
@@ -24,7 +36,8 @@ def parse_ini(path_ini: Path) -> dict[str, str]:
     if len(names) != len(urls):
         raise ValueError(f"Names and URLs have different lengths: {len(names)} != {len(urls)}")
 
-    names = (n.split('.')[0] for n in names)
+    names = map(parse_name, names)
+    urls = map(parse_url, urls)
     return dict(zip(names, urls))
 
 

@@ -93,5 +93,7 @@ data/
     - Click on the **Name** field to sort the links.
     - Select all links, right click and go to **Other->Move to new Pakage**. Move them to a package called `all`.
     - Select the `all` package, right click and go to **Properties->Show Download URLs**.
-    - Select all links, right click on the left column and click **Copy Information: Name**. Paste the names under `[SECTION_NAMES]`
-    - Select all links, right click on the right column and click **Copy URLs**. Paste the links under `[SECTION_URLS]`
+    - Select all links, right click on the left column and click **Copy Information: Name**. Paste the names under `[SECTION_NAMES]`.
+    - Select all links, right click on the right column and click **Copy URLs**. Paste the links under `[SECTION_URLS]`.
+
+- Run `python3 src/parse_sorted_urls.py` to map names and URLs together (plus some small post-processing).
