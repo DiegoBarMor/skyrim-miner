@@ -6,14 +6,14 @@ HEADER_URLS = "[SECTION_URLS]"
 
 # ------------------------------------------------------------------------------
 def parse_name(name: str) -> str:
-    return name.split('.')[0]
+    return Path(name).stem
 
 
 # ------------------------------------------------------------------------------
 def parse_url(url: str) -> str:
     parts = url.split('/')
     url_id = parts[-2]
-    return f"https://drive.google.com/thumbnail?id={url_id}"
+    return f"https://drive.google.com/thumbnail?id={url_id}&sz=w1000"
 
 
 # ------------------------------------------------------------------------------
